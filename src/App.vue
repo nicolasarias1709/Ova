@@ -19,14 +19,16 @@ import NavBar from './components/NavBar.vue'
 .ova-header {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-md);
   background: var(--color-fondo-suave);
+  border-bottom: 1px solid var(--color-borde);
 }
 
 .ova-titulo {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.3rem;
+  font-weight: 700;
   font-family: var(--fuente-titulo);
+  color: var(--color-corriente);
 }
 </style>
