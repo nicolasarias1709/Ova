@@ -1,0 +1,18 @@
+
+:root {
+  --color-primario: #00e5ff;
+  --color-secundario: #ff9100;
+  --color-peligro: #ff1744;
+  --color-exito: #00e676;
+  --color-fondo: #0d0d0d;
+  --color-fondo-suave: #1a1a1a;
+  --color-texto: #f2f2f2;
+  --color-texto-suave: #9a9a9a;
+
+  --fuente-titulo: 'Poppins', sans-serif;
+  --fuente-texto: 'Inter', sans-serif;
+
+  --radio-borde: 10px;
+  --transicion-rapida: 0.2s ease;
+  --transicion-media: 0.4s ease;
+}
