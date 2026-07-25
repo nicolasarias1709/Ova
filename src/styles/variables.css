@@ -1,18 +1,47 @@
 
 :root {
-  --color-primario: #00e5ff;
-  --color-secundario: #ff9100;
-  --color-peligro: #ff1744;
-  --color-exito: #00e676;
-  --color-fondo: #0d0d0d;
-  --color-fondo-suave: #1a1a1a;
-  --color-texto: #f2f2f2;
-  --color-texto-suave: #9a9a9a;
+  /* ── Base: tonos de placa de circuito (PCB) ── */
+  --color-fondo: #0b1f1a;          /* verde-negro, como una PCB real */
+  --color-fondo-suave: #14332a;    /* panel/tarjeta, un tono más claro */
+  --color-fondo-elevado: #1c4236;  /* hover / elementos flotantes */
+  --color-borde: #2a5747;          /* bordes sutiles sobre el fondo verde */
 
-  --fuente-titulo: 'Poppins', sans-serif;
-  --fuente-texto: 'Inter', sans-serif;
+  /* ── Acentos: cobre (pistas) y cian (corriente) ── */
+  --color-cobre: #c9812f;          /* color primario: pistas de cobre */
+  --color-cobre-claro: #e3a253;    /* hover del cobre */
+  --color-corriente: #4dd8e8;      /* cian eléctrico: electrones, énfasis */
+  --color-corriente-claro: #8be9f2;
 
+  /* ── Estados ── */
+  --color-exito: #7cff6b;          /* verde fósforo, tipo osciloscopio */
+  --color-peligro: #ff5a3c;        /* rojo-naranja de sobrecarga/chispa */
+  --color-advertencia: #ffcf4d;    /* amarillo, voltajes intermedios */
+
+  /* ── Texto ── */
+  --color-texto: #eef5f2;          /* blanco con tinte verde suave */
+  --color-texto-suave: #83a196;    /* gris-verde para texto secundario */
+
+  /* ── Tipografía ── */
+  --fuente-titulo: 'Space Grotesk', sans-serif;
+  --fuente-texto: 'IBM Plex Sans', sans-serif;
+  --fuente-datos: 'IBM Plex Mono', monospace;
+
+  /* ── Espaciado ── */
+  --espacio-xs: 0.5rem;
+  --espacio-sm: 1rem;
+  --espacio-md: 1.5rem;
+  --espacio-lg: 2.5rem;
+  --espacio-xl: 4rem;
+
+  /* ── Bordes y sombras ── */
   --radio-borde: 10px;
+  --radio-borde-sm: 6px;
+  --sombra-panel: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --sombra-brillo-cobre: 0 0 12px rgba(201, 129, 47, 0.45);
+  --sombra-brillo-corriente: 0 0 14px rgba(77, 216, 232, 0.5);
+
+  /* ── Transiciones ── */
   --transicion-rapida: 0.2s ease;
   --transicion-media: 0.4s ease;
+  --transicion-lenta: 0.7s ease;
 }

@@ -1,15 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background: var(--color-fondo);
+  background-image:
+    linear-gradient(var(--color-borde) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-borde) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-attachment: fixed;
   color: var(--color-texto);
   font-family: var(--fuente-texto);
+  line-height: 1.5;
 }
 
 h1, h2, h3 {
   font-family: var(--fuente-titulo);
+  font-weight: 600;
+  margin: 0 0 var(--espacio-sm) 0;
+  color: var(--color-texto);
+}
+
+h1 { font-size: 2.2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.15rem; }
+
+p {
+  margin: 0 0 var(--espacio-sm) 0;
+  color: var(--color-texto-suave);
+}
+
+.dato-numerico {
+  font-family: var(--fuente-datos);
+  font-weight: 600;
+  color: var(--color-corriente);
+}
+
+button {
+  font-family: var(--fuente-texto);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--color-corriente);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 600px) {
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.25rem; }
 }
