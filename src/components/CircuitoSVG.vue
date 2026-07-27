@@ -1,6 +1,6 @@
 <template>
-  <svg viewBox="0 0 400 220" class="circuito-svg" xmlns="http://www.w3.org/2000/svg">
-    <!-- Recorrido completo del cable (lo usaremos para animar los electrones en la tarde) -->
+  <svg viewBox="0 0 400 220" class="circuito-svg" xmlns="http://www.w3.org/2000/svg" ref="svgRef">
+    <!-- Recorrido completo del cable (los electrones se mueven sobre este mismo path) -->
     <path
       id="cable-recorrido"
       class="cable"
@@ -32,16 +32,58 @@
       <line x1="290" y1="100" x2="310" y2="120" class="bombillo-filamento" />
       <line x1="310" y1="100" x2="290" y2="120" class="bombillo-filamento" />
     </g>
+
+    <!-- Electrones animados: siguen el mismo recorrido del cable -->
+    <circle
+      v-for="n in numeroElectrones"
+      :key="n"
+      class="electron"
+      r="4"
+    >
+      <animateMotion
+        :dur="`${duracion}s`"
+        repeatCount="indefinite"
+        :begin="`${(n - 1) * (duracion / numeroElectrones)}s`"
+      >
+        <mpath href="#cable-recorrido" />
+      </animateMotion>
+    </circle>
   </svg>
 </template>
 
 <script setup>
-defineProps({
+import { computed, ref, watch } from 'vue'
+
+const props = defineProps({
   voltaje: { type: Number, default: 0 },
   corriente: { type: Number, default: 0 },
   resistencia: { type: Number, default: 0 },
   interruptorCerrado: { type: Boolean, default: true }
 })
+
+const svgRef = ref(null)
+
+// Cuántos electrones se ven a la vez sobre el cable
+const numeroElectrones = 6
+
+// A más corriente, menos segundos tarda la vuelta completa (más rápido)
+const duracion = computed(() => {
+  const i = Math.max(props.corriente, 0.1)
+  return Math.max(6 / i, 0.6)
+})
+
+// Si el interruptor se abre, se pausan todas las animaciones del SVG (los electrones se congelan)
+watch(
+  () => props.interruptorCerrado,
+  (cerrado) => {
+    if (!svgRef.value) return
+    if (cerrado) {
+      svgRef.value.unpauseAnimations()
+    } else {
+      svgRef.value.pauseAnimations()
+    }
+  }
+)
 </script>
 
 <style scoped>
@@ -97,5 +139,16 @@ defineProps({
   font-family: var(--fuente-datos);
   font-size: 14px;
   fill: var(--color-texto-suave);
+}
+
+.electron {
+  fill: var(--color-corriente);
+  filter: drop-shadow(0 0 3px var(--color-corriente));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .electron {
+    animation: none;
+  }
 }
 </style>
