@@ -54,10 +54,13 @@ src/
 
 ## Capturas de pantalla
 
-(./capturas/captura.png)
-(./capturas/campura2.png)
-(./capturas/captura3.png)
-(./capturas/captura4.png)
+![captura](./capturas/captura.png)
+
+![captura](./capturas/campura2.png)
+
+![captura](./capturas/captura3.png)
+
+![captura](./capturas/captura4.png)
 
 ## Estado
 🚧 En construcción.
