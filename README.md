@@ -53,7 +53,11 @@ src/
 ```
 
 ## Capturas de pantalla
-_(se agregarán al finalizar el desarrollo)_
+
+(./capturas/captura.png)
+(./capturas/campura2.png)
+(./capturas/captura3.png)
+(./capturas/captura4.png)
 
 ## Estado
 🚧 En construcción.
