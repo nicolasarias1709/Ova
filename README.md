@@ -62,5 +62,7 @@ src/
 
 ![captura](./capturas/captura4.png)
 
+![captura](./capturas/captura5.png)
+
 ## Estado
 🚧 En construcción.
