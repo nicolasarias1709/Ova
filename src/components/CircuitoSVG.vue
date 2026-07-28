@@ -4,12 +4,13 @@
     <path
       id="cable-recorrido"
       class="cable"
+      :class="{ resaltado: variableResaltada === 'I' }"
       d="M100,180 L100,40 L300,40 L300,180 L60,180"
       fill="none"
     />
 
     <!-- Batería -->
-    <g class="bateria">
+    <g class="bateria" :class="{ resaltado: variableResaltada === 'V' }">
       <line x1="72" y1="166" x2="72" y2="194" class="bateria-terminal-larga" />
       <line x1="88" y1="172" x2="88" y2="188" class="bateria-terminal-corta" />
       <text x="66" y="210" class="etiqueta">V</text>
@@ -17,7 +18,7 @@
     </g>
 
     <!-- Resistencia (zigzag) -->
-    <g class="resistor">
+    <g class="resistor" :class="{ resaltado: variableResaltada === 'R' }">
       <polyline
         points="150,40 160,26 174,54 188,26 202,54 216,26 230,40"
         class="resistor-zigzag"
@@ -26,11 +27,24 @@
       <text x="175" y="18" class="etiqueta">R</text>
     </g>
 
-    <!-- Bombillo -->
+    <!-- Bombillo: el brillo (glow) y el color del vidrio cambian según el voltaje -->
     <g class="bombillo">
-      <circle cx="300" cy="110" r="20" class="bombillo-vidrio" />
-      <line x1="290" y1="100" x2="310" y2="120" class="bombillo-filamento" />
-      <line x1="310" y1="100" x2="290" y2="120" class="bombillo-filamento" />
+      <circle
+        cx="300"
+        cy="110"
+        :r="24 + brilloIntensidad * 10"
+        class="bombillo-glow"
+        :style="{ opacity: brilloIntensidad * 0.6 }"
+      />
+      <circle
+        cx="300"
+        cy="110"
+        r="20"
+        class="bombillo-vidrio"
+        :style="{ fill: colorBombillo }"
+      />
+      <line x1="290" y1="100" x2="310" y2="120" class="bombillo-filamento" :style="{ opacity: 0.4 + brilloIntensidad * 0.6 }" />
+      <line x1="310" y1="100" x2="290" y2="120" class="bombillo-filamento" :style="{ opacity: 0.4 + brilloIntensidad * 0.6 }" />
     </g>
 
     <!-- Electrones animados: siguen el mismo recorrido del cable -->
@@ -58,21 +72,20 @@ const props = defineProps({
   voltaje: { type: Number, default: 0 },
   corriente: { type: Number, default: 0 },
   resistencia: { type: Number, default: 0 },
-  interruptorCerrado: { type: Boolean, default: true }
+  interruptorCerrado: { type: Boolean, default: true },
+  // Cuál variable (V, I, R) está siendo señalada desde la fórmula interactiva
+  variableResaltada: { type: String, default: null }
 })
 
 const svgRef = ref(null)
 
-// Cuántos electrones se ven a la vez sobre el cable
 const numeroElectrones = 6
 
-// A más corriente, menos segundos tarda la vuelta completa (más rápido)
 const duracion = computed(() => {
   const i = Math.max(props.corriente, 0.1)
   return Math.max(6 / i, 0.6)
 })
 
-// Si el interruptor se abre, se pausan todas las animaciones del SVG (los electrones se congelan)
 watch(
   () => props.interruptorCerrado,
   (cerrado) => {
@@ -84,6 +97,21 @@ watch(
     }
   }
 )
+
+// 0 = apagado, 1 = brillo máximo. Se satura a partir de 20V.
+const brilloIntensidad = computed(() => Math.min(props.voltaje / 20, 1))
+
+// Interpola el color del vidrio: gris apagado -> blanco cálido brillante
+function lerp(a, b, t) {
+  return Math.round(a + (b - a) * t)
+}
+const colorBombillo = computed(() => {
+  const t = brilloIntensidad.value
+  const r = lerp(20, 255, t)
+  const g = lerp(50, 244, t)
+  const b = lerp(45, 214, t)
+  return `rgb(${r}, ${g}, ${b})`
+})
 </script>
 
 <style scoped>
@@ -100,6 +128,7 @@ watch(
   stroke-width: 4;
   stroke-linejoin: round;
   stroke-linecap: round;
+  transition: stroke var(--transicion-media), filter var(--transicion-media);
 }
 
 .bateria-terminal-larga {
@@ -118,15 +147,22 @@ watch(
   stroke-linejoin: round;
 }
 
+.bombillo-glow {
+  fill: var(--color-advertencia);
+  filter: blur(6px);
+  transition: opacity var(--transicion-media);
+}
+
 .bombillo-vidrio {
-  fill: var(--color-fondo-suave);
   stroke: var(--color-corriente);
   stroke-width: 3;
+  transition: fill var(--transicion-media);
 }
 
 .bombillo-filamento {
-  stroke: var(--color-corriente);
+  stroke: var(--color-fondo);
   stroke-width: 2;
+  transition: opacity var(--transicion-media);
 }
 
 .etiqueta {
@@ -144,6 +180,24 @@ watch(
 .electron {
   fill: var(--color-corriente);
   filter: drop-shadow(0 0 3px var(--color-corriente));
+}
+
+/* Resaltado al pasar el mouse sobre la fórmula */
+.bateria.resaltado .bateria-terminal-larga,
+.bateria.resaltado .bateria-terminal-corta {
+  stroke: var(--color-corriente);
+  filter: drop-shadow(0 0 6px var(--color-corriente));
+}
+
+.resistor.resaltado .resistor-zigzag {
+  stroke: var(--color-corriente);
+  stroke-width: 5;
+  filter: drop-shadow(0 0 6px var(--color-corriente));
+}
+
+.cable.resaltado {
+  stroke: var(--color-corriente);
+  filter: drop-shadow(0 0 6px var(--color-corriente));
 }
 
 @media (prefers-reduced-motion: reduce) {
