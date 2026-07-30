@@ -13,7 +13,11 @@
 
     <InterruptorSwitch v-model:cerrado="interruptorCerrado" />
 
-    <GraficaVI :puntos="puntosGrafica" />
+    <GraficaVI
+      :resistencia="resistencia"
+      :voltaje-actual="voltaje"
+      :corriente-actual="corriente"
+    />
 
     <SobrecargaAnimacion :activa="voltaje > 20" />
   </section>
@@ -31,10 +35,7 @@ const voltaje = ref(12)
 const resistencia = ref(4)
 const interruptorCerrado = ref(true)
 
-// La corriente ya no es un valor fijo: se calcula sola a partir de V y R (Ley de Ohm)
 const corriente = computed(() => voltaje.value / resistencia.value)
-
-const puntosGrafica = ref([])
 </script>
 
 <style scoped>
