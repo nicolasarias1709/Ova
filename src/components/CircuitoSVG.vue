@@ -23,6 +23,7 @@
         points="150,40 160,26 174,54 188,26 202,54 216,26 230,40"
         class="resistor-zigzag"
         fill="none"
+        :style="{ stroke: colorResistencia }"
       />
       <text x="175" y="18" class="etiqueta">R</text>
     </g>
@@ -73,7 +74,6 @@ const props = defineProps({
   corriente: { type: Number, default: 0 },
   resistencia: { type: Number, default: 0 },
   interruptorCerrado: { type: Boolean, default: true },
-  // Cuál variable (V, I, R) está siendo señalada desde la fórmula interactiva
   variableResaltada: { type: String, default: null }
 })
 
@@ -98,10 +98,8 @@ watch(
   }
 )
 
-// 0 = apagado, 1 = brillo máximo. Se satura a partir de 20V.
 const brilloIntensidad = computed(() => Math.min(props.voltaje / 20, 1))
 
-// Interpola el color del vidrio: gris apagado -> blanco cálido brillante
 function lerp(a, b, t) {
   return Math.round(a + (b - a) * t)
 }
@@ -111,6 +109,29 @@ const colorBombillo = computed(() => {
   const g = lerp(50, 244, t)
   const b = lerp(45, 214, t)
   return `rgb(${r}, ${g}, ${b})`
+})
+
+// La resistencia cambia de color según cuánta corriente la atraviesa:
+// gris (poca corriente) -> naranja (media) -> rojo (mucha, se está calentando)
+const colorResistencia = computed(() => {
+  const t = Math.min(props.corriente / 8, 1) // se satura a partir de 8A
+  const gris = [124, 148, 138]
+  const naranja = [255, 145, 0]
+  const rojo = [255, 45, 45]
+
+  if (t < 0.5) {
+    const t2 = t * 2
+    const r = lerp(gris[0], naranja[0], t2)
+    const g = lerp(gris[1], naranja[1], t2)
+    const b = lerp(gris[2], naranja[2], t2)
+    return `rgb(${r}, ${g}, ${b})`
+  } else {
+    const t2 = (t - 0.5) * 2
+    const r = lerp(naranja[0], rojo[0], t2)
+    const g = lerp(naranja[1], rojo[1], t2)
+    const b = lerp(naranja[2], rojo[2], t2)
+    return `rgb(${r}, ${g}, ${b})`
+  }
 })
 </script>
 
@@ -142,9 +163,9 @@ const colorBombillo = computed(() => {
 }
 
 .resistor-zigzag {
-  stroke: var(--color-advertencia);
   stroke-width: 4;
   stroke-linejoin: round;
+  transition: stroke 0.3s ease;
 }
 
 .bombillo-glow {
@@ -182,7 +203,6 @@ const colorBombillo = computed(() => {
   filter: drop-shadow(0 0 3px var(--color-corriente));
 }
 
-/* Resaltado al pasar el mouse sobre la fórmula */
 .bateria.resaltado .bateria-terminal-larga,
 .bateria.resaltado .bateria-terminal-corta {
   stroke: var(--color-corriente);

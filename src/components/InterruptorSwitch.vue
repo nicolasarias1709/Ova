@@ -1,7 +1,19 @@
 <template>
-  <button class="switch" :class="{ activo: cerrado }" @click="$emit('update:cerrado', !cerrado)">
-    {{ cerrado ? 'Circuito cerrado' : 'Circuito abierto' }}
-  </button>
+  <div class="interruptor-wrapper">
+    <button
+      class="interruptor"
+      :class="{ cerrado: cerrado }"
+      @click="$emit('update:cerrado', !cerrado)"
+      :aria-pressed="cerrado"
+    >
+      <span class="interruptor-riel">
+        <span class="interruptor-perilla"></span>
+      </span>
+    </button>
+    <span class="interruptor-texto" :class="{ 'texto-abierto': !cerrado }">
+      {{ cerrado ? 'Circuito cerrado' : 'Circuito abierto' }}
+    </span>
+  </div>
 </template>
 
 <script setup>
@@ -12,17 +24,56 @@ defineEmits(['update:cerrado'])
 </script>
 
 <style scoped>
-.switch {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radio-borde);
-  border: 2px solid var(--color-primario);
-  background: transparent;
-  color: var(--color-texto);
-  cursor: pointer;
-  transition: background var(--transicion-rapida);
+.interruptor-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  margin: var(--espacio-md) 0;
 }
-.switch.activo {
-  background: var(--color-primario);
-  color: var(--color-fondo);
+
+.interruptor {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.interruptor-riel {
+  display: block;
+  width: 56px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--color-peligro);
+  position: relative;
+  transition: background var(--transicion-media);
+}
+
+.interruptor.cerrado .interruptor-riel {
+  background: var(--color-exito);
+}
+
+.interruptor-perilla {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-texto);
+  transition: transform var(--transicion-media);
+}
+
+.interruptor.cerrado .interruptor-perilla {
+  transform: translateX(28px);
+}
+
+.interruptor-texto {
+  font-family: var(--fuente-datos);
+  font-size: 0.95rem;
+  color: var(--color-exito);
+}
+
+.interruptor-texto.texto-abierto {
+  color: var(--color-peligro);
 }
 </style>
