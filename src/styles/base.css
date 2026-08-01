@@ -69,3 +69,12 @@ input:focus-visible {
   h1 { font-size: 1.6rem; }
   h2 { font-size: 1.25rem; }
 }
+
+@media (max-width: 480px) {
+  .ejercicio-input-fila {
+    flex-direction: column;
+  }
+  .ejercicio-input-fila .btn-comprobar {
+    width: 100%;
+  }
+}
