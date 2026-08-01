@@ -77,4 +77,11 @@ input:focus-visible {
   .ejercicio-input-fila .btn-comprobar {
     width: 100%;
   }
+}@media (max-width: 480px) {
+  .ejercicio-input-fila {
+    flex-direction: column;
+  }
+  .ejercicio-input-fila .btn-comprobar {
+    width: 100%;
+  }
 }
